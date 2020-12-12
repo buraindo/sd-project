@@ -5,8 +5,6 @@ import ru.itmo.cafe.model.item.Product
 sealed class Burger : Product
 
 object HamBurger : Burger() {
-    override val hasDiscount = false
-
     override val discount = 0.0
 
     override val preparationTime = 7
@@ -17,8 +15,6 @@ object HamBurger : Burger() {
 }
 
 object CheeseBurger : Burger() {
-    override val hasDiscount = true
-
     override val discount = 0.2
 
     override val preparationTime = 6

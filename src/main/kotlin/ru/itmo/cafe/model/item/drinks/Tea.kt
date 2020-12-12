@@ -4,8 +4,6 @@ import ru.itmo.cafe.model.item.Item
 import ru.itmo.cafe.model.item.Product
 
 class Tea(private val color: TeaColor, private val temperature: TeaTemperature, private val size: TeaSize) : Product {
-    override val hasDiscount = false
-
     override val discount = 0.0
 
     override val preparationTime = when (temperature) {
@@ -13,7 +11,7 @@ class Tea(private val color: TeaColor, private val temperature: TeaTemperature, 
         Hot -> 10
     }
 
-    override val name = "Чай $color, $temperature, $size"
+    override val name = "Чай ${color.name}, ${temperature.name}, ${size.name}"
 
     override val price = color.price + temperature.price + size.price
 }
