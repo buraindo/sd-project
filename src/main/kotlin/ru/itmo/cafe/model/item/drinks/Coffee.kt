@@ -4,42 +4,42 @@ import ru.itmo.cafe.model.item.Item
 import ru.itmo.cafe.model.item.Product
 
 class Coffee(private val type: CoffeeType, private val size: CoffeeSize) : Product {
-    override fun hasDiscount() = false
+    override val hasDiscount = false
 
-    override fun getDiscount() = 0.0
+    override val discount = 0.0
 
-    override fun getPreparationTime() = 10
+    override val preparationTime = 10
 
-    override fun getName() = "Кофе $type, $size"
+    override val name = "Кофе $type, $size"
 
-    override fun getPrice() = type.getPrice() + size.getPrice()
+    override val price = type.price + size.price
 }
 
 sealed class CoffeeType : Item
 
 object Espresso : CoffeeType() {
-    override fun getName() = "эспрессо"
-    override fun getPrice() = 10
+    override val name = "эспрессо"
+    override val price = 10
 }
 
 object Cappuccino : CoffeeType() {
-    override fun getName() = "капуччино"
-    override fun getPrice() = 15
+    override val name = "капуччино"
+    override val price = 15
 }
 
 object Latte : CoffeeType() {
-    override fun getName() = "латте"
-    override fun getPrice() = 15
+    override val name = "латте"
+    override val price = 15
 }
 
 sealed class CoffeeSize : Item
 
 object CoffeeSmall : CoffeeSize() {
-    override fun getName() = "0.2л"
-    override fun getPrice() = 0
+    override val name = "0.2л"
+    override val price = 0
 }
 
 object CoffeeMedium : CoffeeSize() {
-    override fun getName() = "0.33л"
-    override fun getPrice() = 10
+    override val name = "0.33л"
+    override val price = 10
 }

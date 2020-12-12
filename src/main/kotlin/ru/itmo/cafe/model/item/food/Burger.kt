@@ -5,37 +5,37 @@ import ru.itmo.cafe.model.item.Product
 sealed class Burger : Product
 
 object HamBurger : Burger() {
-    override fun hasDiscount() = false
+    override val hasDiscount = false
 
-    override fun getDiscount() = 0.0
+    override val discount = 0.0
 
-    override fun getPreparationTime() = 7
+    override val preparationTime = 7
 
-    override fun getName() = "Гамбургер"
+    override val name = "Гамбургер"
 
-    override fun getPrice() = 50
+    override val price = 50
 }
 
 object CheeseBurger : Burger() {
-    override fun hasDiscount() = true
+    override val hasDiscount = true
 
-    override fun getDiscount() = 0.2
+    override val discount = 0.2
 
-    override fun getPreparationTime() = 6
+    override val preparationTime = 6
 
-    override fun getName() = "Чизбургер"
+    override val name = "Чизбургер"
 
-    override fun getPrice() = 45
+    override val price = 45
 }
 
 class ExtraCutletDecorator(private val burger: Burger) : Burger() {
-    override fun hasDiscount() = burger.hasDiscount()
+    override val hasDiscount = burger.hasDiscount
 
-    override fun getDiscount() = burger.getDiscount()
+    override val discount = burger.discount
 
-    override fun getPreparationTime() = burger.getPreparationTime() + 1
+    override val preparationTime = burger.preparationTime + 1
 
-    override fun getName() = burger.getName() + ", доп. котлета"
+    override val name = burger.name + ", доп. котлета"
 
-    override fun getPrice() = burger.getPrice() + 1
+    override val price = burger.price + 1
 }

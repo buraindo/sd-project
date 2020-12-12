@@ -1,7 +1,7 @@
 package ru.itmo.cafe.model.item
 
 interface Item {
-    fun getName(): String
+    val name: String
 
-    fun getPrice(): Int
+    val price: Int
 }

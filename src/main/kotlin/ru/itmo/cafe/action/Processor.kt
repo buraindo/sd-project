@@ -4,24 +4,25 @@ import ru.itmo.cafe.exceptions.ActionNotFoundException
 import ru.itmo.cafe.exceptions.OrderNotFoundException
 
 object Processor {
-    private val actions: HashMap<Int, Action> = hashMapOf()
+    private val actions = hashMapOf<Int, Action>()
 
     fun schedule(action: Action) {
         val id = action.id
-        if (actions.containsKey(id)) {
-            return
-        }
+
+        if (id in actions) return
+
         actions[id] = action
-        try {
+
+        runCatching {
             action.execute()
-        } catch (e: Exception) {
-            when (e) {
-                is ActionNotFoundException -> println("Операции ${e.id} не существует")
-                is OrderNotFoundException -> println("Заказ ${e.id} не найден")
-                else -> throw e
+        }.onFailure {
+            when (it) {
+                is ActionNotFoundException -> println("Операции ${it.id} не существует")
+                is OrderNotFoundException -> println("Заказ ${it.id} не найден")
+                else -> throw it
             }
         }
     }
 
-    fun getAction(actionId: Int) = actions[actionId] ?: throw ActionNotFoundException(actionId)
+    fun findAction(actionId: Int) = actions[actionId] ?: throw ActionNotFoundException(actionId)
 }

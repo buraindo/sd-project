@@ -4,52 +4,52 @@ import ru.itmo.cafe.model.item.Item
 import ru.itmo.cafe.model.item.Product
 
 class Tea(private val color: TeaColor, private val temperature: TeaTemperature, private val size: TeaSize) : Product {
-    override fun hasDiscount() = false
+    override val hasDiscount = false
 
-    override fun getDiscount() = 0.0
+    override val discount = 0.0
 
-    override fun getPreparationTime() = when (temperature) {
+    override val preparationTime = when (temperature) {
         Cold -> 0
         Hot -> 10
     }
 
-    override fun getName() = "Чай $color, $temperature, $size"
+    override val name = "Чай $color, $temperature, $size"
 
-    override fun getPrice() = color.getPrice() + temperature.getPrice() + size.getPrice()
+    override val price = color.price + temperature.price + size.price
 }
 
 sealed class TeaColor : Item
 
 object Black : TeaColor() {
-    override fun getName() = "черный"
-    override fun getPrice() = 10
+    override val name = "черный"
+    override val price = 10
 }
 
 object Green : TeaColor() {
-    override fun getName() = "зеленый"
-    override fun getPrice() = 15
+    override val name = "зеленый"
+    override val price = 15
 }
 
 sealed class TeaTemperature : Item
 
 object Cold : TeaTemperature() {
-    override fun getName() = "холодный"
-    override fun getPrice() = 55
+    override val name = "холодный"
+    override val price = 55
 }
 
 object Hot : TeaTemperature() {
-    override fun getName() = "горячий"
-    override fun getPrice() = 10
+    override val name = "горячий"
+    override val price = 10
 }
 
 sealed class TeaSize : Item
 
 object TeaSmall : TeaSize() {
-    override fun getName() = "0.2л"
-    override fun getPrice() = 0
+    override val name = "0.2л"
+    override val price = 0
 }
 
 object TeaMedium : TeaSize() {
-    override fun getName() = "0.33л"
-    override fun getPrice() = 10
+    override val name = "0.33л"
+    override val price = 10
 }
