@@ -4,8 +4,6 @@ import ru.itmo.cafe.model.item.Item
 import ru.itmo.cafe.model.item.Product
 
 class Coffee(private val type: CoffeeType, private val size: CoffeeSize) : Product {
-    override val hasDiscount = false
-
     override val discount = 0.0
 
     override val preparationTime = 10
