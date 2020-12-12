@@ -1,7 +1,6 @@
 package ru.itmo.cafe.model.order
 
 import ru.itmo.cafe.context.GlobalContext
-import ru.itmo.cafe.model.item.Item
 import ru.itmo.cafe.model.item.Product
 import ru.itmo.cafe.model.payment.PaymentModel
 
@@ -43,9 +42,7 @@ class Order(val id: Int) {
 
     fun print() {
         println("Заказ №$id:")
-        for (item in products) {
-            item.print()
-        }
+        products.forEach { it.print() }
     }
 }
 

@@ -1,13 +1,14 @@
 package ru.itmo.cafe.model.item
 
 interface Product : Item {
-    fun hasDiscount(): Boolean
+    val hasDiscount: Boolean
 
-    fun getDiscount(): Double
+    val discount: Double
 
-    fun getPreparationTime(): Int
+    val preparationTime: Int
 
-    fun print() = println(getName() + ": ${getPrice()}")
+    val priceWithDiscount: Int
+        get() = price * (1 - discount).toInt()
 
-    fun getPriceWithDiscount(): Int = if (hasDiscount()) (getPrice() * (1 - getDiscount())).toInt() else getPrice()
+    fun print() = println("$name: $price")
 }

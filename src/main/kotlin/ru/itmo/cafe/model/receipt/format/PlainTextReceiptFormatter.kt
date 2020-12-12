@@ -5,11 +5,11 @@ import ru.itmo.cafe.model.receipt.Receipt
 class PlainTextReceiptFormatter : ReceiptFormatter {
     override fun format(receipt: Receipt): String {
         val products =
-            receipt.getProducts().map { "${it.getName()}: ${it.getPriceWithDiscount()}" }.joinToString { "\n" }
+            receipt.products.map { "${it.name}: ${it.priceWithDiscount}" }.joinToString { "\n" }
         return """
-            Заказ №${receipt.getOrderId()}
+            Заказ №${receipt.orderId}
             $products
-            Итого: ${receipt.getPrice()} (с учетом скидки и НДС)
+            Итого: ${receipt.price} (с учетом скидки и НДС)
         """.trimIndent()
     }
 }

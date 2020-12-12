@@ -3,9 +3,10 @@ package ru.itmo.cafe.model.receipt
 import ru.itmo.cafe.model.order.Order
 
 class Receipt(private val order: Order) {
-    fun getOrderId() = order.id
+    val orderId = order.id
 
-    fun getPrice() = order.products.sumBy { it.getPriceWithDiscount() }
+    val price: Int
+        get() = order.products.sumBy { it.priceWithDiscount }
 
-    fun getProducts() = order.products
+    val products = order.products
 }
