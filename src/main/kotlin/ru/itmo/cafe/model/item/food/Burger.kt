@@ -24,7 +24,7 @@ object CheeseBurger : Burger() {
     override val price = 45
 }
 
-class ExtraCutletDecorator(private val burger: Burger) : Burger() {
+class ExtraCutletDecorator(burger: Burger) : Burger() {
     override val hasDiscount = burger.hasDiscount
 
     override val discount = burger.discount

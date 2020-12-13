@@ -1,29 +1,29 @@
 package ru.itmo.cafe.cli.state
 
 abstract class State {
+    abstract val optionsNames: List<String>
 
-    companion object {
-        const val BACK = 0
-    }
+    open val hasBack: Boolean = true
 
-    abstract fun optionsNames(): List<String>
+    abstract val name: String
 
-    open fun hasBack(): Boolean = true
-
-    abstract fun name(): String
-
-    abstract fun back(): State?
+    abstract val back: State?
 
     abstract fun forward(option: Int): State
 
-    final override fun toString(): String = buildString {
-        appendLine(name())
-        if (hasBack()) {
+    final override fun toString() = buildString {
+        appendLine(name)
+        if (hasBack) {
             appendLine("\t$BACK -> Назад")
+
         }
-        optionsNames().forEachIndexed { i, name ->
+        optionsNames.forEachIndexed { i, name ->
             appendLine("\t${i + 1} -> $name")
         }
+    }
+
+    companion object {
+        const val BACK = 0
     }
 }
 

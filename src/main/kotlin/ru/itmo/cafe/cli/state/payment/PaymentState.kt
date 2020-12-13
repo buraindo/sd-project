@@ -11,38 +11,31 @@ import ru.itmo.cafe.cli.state.State
 import ru.itmo.cafe.model.order.Order
 import ru.itmo.cafe.model.payment.CardPaymentModel
 import ru.itmo.cafe.model.payment.CashPaymentModel
-import ru.itmo.cafe.model.payment.PaymentModel
 import ru.itmo.cafe.model.receipt.format.PlainTextReceiptFormatter
 
-class PaymentState : State() {
+object PaymentState : State() {
 
-    override fun optionsNames(): List<String> = listOf("Наличные", "Карта")
+    override val optionsNames = listOf("Наличные", "Карта")
 
-    override fun name(): String = "Оплатить заказ"
+    override val name = "Оплатить заказ"
 
-    override fun back(): State = HomeState()
+    override val back = HomeState
 
-    override fun forward(option: Int): State {
+    override fun forward(option: Int): HomeState {
         val curOrder = Order.Builder().withItems(CafeManager.products).withToGo(CafeManager.toGo).build()
         val receiptAction = PrintReceiptAction(curOrder, PlainTextReceiptFormatter())
         Processor.schedule(receiptAction)
         CafeManager.clear()
 
-        val paymentModel: PaymentModel = when (option) {
-            1 -> {
-                CashPaymentModel()
-            }
-            2 -> {
-                CardPaymentModel()
-            }
-            else -> {
-                throw NoSuchMenuItemException(option)
-            }
+        val paymentModel = when (option) {
+            1 -> CashPaymentModel()
+            2 -> CardPaymentModel()
+            else -> throw NoSuchMenuItemException(option)
         }
 
         Processor.schedule(PaymentAction(paymentModel))
         Processor.schedule(CreateOrderAction(curOrder))
 
-        return HomeState()
+        return HomeState
     }
 }

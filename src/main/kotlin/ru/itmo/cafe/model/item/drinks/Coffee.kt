@@ -3,12 +3,12 @@ package ru.itmo.cafe.model.item.drinks
 import ru.itmo.cafe.model.item.Item
 import ru.itmo.cafe.model.item.Product
 
-class Coffee(private val type: CoffeeType, private val size: CoffeeSize) : Product {
+class Coffee(type: CoffeeType, size: CoffeeSize) : Product {
     override val discount = 0.0
 
     override val preparationTime = 10
 
-    override val name = "Кофе $type, $size"
+    override val name = "Кофе ${type.name}, ${size.name}"
 
     override val price = type.price + size.price
 }

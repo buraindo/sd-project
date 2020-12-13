@@ -1,58 +1,52 @@
-package ru.itmo.cafe.cli.state
+package ru.itmo.cafe.cli.state.status
 
-import ru.itmo.cafe.action.*
+import ru.itmo.cafe.action.CancelOrderAction
+import ru.itmo.cafe.action.PickUpOrderAction
+import ru.itmo.cafe.action.Processor
+import ru.itmo.cafe.action.ViewOrderAction
 import ru.itmo.cafe.cli.exceptions.NoSuchMenuItemException
-import ru.itmo.cafe.exceptions.OrderNotFoundException
+import ru.itmo.cafe.cli.state.HomeState
+import ru.itmo.cafe.cli.state.State
 import ru.itmo.cafe.manager.OrderManager
 
-class OrderStatusState : State() {
+object OrderStatusState : State() {
 
-    override fun optionsNames(): List<String> = emptyList()
+    override val optionsNames = emptyList<String>()
 
-    override fun name(): String = "Введите номер заказа"
+    override val name = "Введите номер заказа"
 
-    override fun back(): State = HomeState()
+    override val back = HomeState
 
     override fun forward(option: Int): State {
-        val orderId = option
-        val viewOrderAction = ViewOrderAction(orderId)
         var failed = false
-        try {
-            OrderManager.findOrder(orderId)
-        } catch (e: OrderNotFoundException) {
-            failed = true
-        }
-        Processor.schedule(viewOrderAction)
-        if (failed) {
-            return this
-        }
 
-        return OrderOptionState(orderId)
+        runCatching {
+            OrderManager.findOrder(option)
+        }.onFailure { failed = true }
+
+        Processor.schedule(ViewOrderAction(option))
+
+        return if (failed) this else OrderOptionState(option)
     }
 }
 
 class OrderOptionState(private val orderId: Int) : State() {
 
-    override fun name(): String = "Что сделать с заказом?"
+    override val name = "Что сделать с заказом?"
 
-    override fun back(): State = OrderStatusState()
+    override val back = OrderStatusState
 
-    override fun optionsNames(): List<String> = listOf("Забрать", "Отменить")
+    override val optionsNames = listOf("Забрать", "Отменить")
 
-    override fun forward(option: Int): State {
-        val action: Action = when (option) {
-            1 -> {
-                PickUpOrderAction(orderId)
-            }
-            2 -> {
-                CancelOrderAction(orderId)
-            }
-            else -> {
-                throw NoSuchMenuItemException(option)
-            }
+    override fun forward(option: Int): HomeState {
+        val action = when (option) {
+            1 -> PickUpOrderAction(orderId)
+            2 -> CancelOrderAction(orderId)
+            else -> throw NoSuchMenuItemException(option)
         }
+
         Processor.schedule(action)
 
-        return HomeState()
+        return HomeState
     }
 }
