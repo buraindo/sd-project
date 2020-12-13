@@ -1,5 +1,8 @@
 package ru.itmo.cafe
 
-fun main(args: Array<String>) {
-    // TODO (damtev) стартануть CLI
+import ru.itmo.cafe.cli.manager.CafeManager
+
+fun main() {
+    val cafeManager = CafeManager()
+    cafeManager.run()
 }

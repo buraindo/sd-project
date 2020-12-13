@@ -8,7 +8,7 @@ class Order(val id: Int) {
     private var toGo: Boolean = false
     private var receipt: Boolean = false
 
-    internal var products: List<Product> = listOf()
+    internal var products: List<Product> = mutableListOf()
         private set
     internal var status: Status = Status.CREATED
 
@@ -32,8 +32,8 @@ class Order(val id: Int) {
             return this
         }
 
-        fun withToGo(): Builder {
-            order.toGo = true
+        fun withToGo(toGo: Boolean): Builder {
+            order.toGo = toGo
             return this
         }
 
