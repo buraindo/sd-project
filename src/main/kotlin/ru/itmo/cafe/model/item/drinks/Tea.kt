@@ -3,7 +3,7 @@ package ru.itmo.cafe.model.item.drinks
 import ru.itmo.cafe.model.item.Item
 import ru.itmo.cafe.model.item.Product
 
-class Tea(private val color: TeaColor, private val temperature: TeaTemperature, private val size: TeaSize) : Product {
+class Tea(color: TeaColor, temperature: TeaTemperature, size: TeaSize) : Product {
     override val discount = 0.0
 
     override val preparationTime = when (temperature) {

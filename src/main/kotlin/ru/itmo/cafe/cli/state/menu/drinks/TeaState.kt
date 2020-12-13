@@ -2,52 +2,39 @@ package ru.itmo.cafe.cli.state.menu.drinks
 
 import ru.itmo.cafe.cli.exceptions.NoSuchMenuItemException
 import ru.itmo.cafe.cli.manager.CafeManager
-import ru.itmo.cafe.cli.state.MenuState
+import ru.itmo.cafe.cli.state.menu.MenuState
 import ru.itmo.cafe.cli.state.State
 import ru.itmo.cafe.model.item.drinks.*
 
-class TeaState: State() {
-    override fun optionsNames(): List<String> = listOf("Добавить черный чай", "Добавить зеленый чай")
+object TeaState : State() {
+    override val optionsNames = listOf("Добавить черный чай", "Добавить зеленый чай")
 
-    override fun name(): String = "Чай"
+    override val name = "Чай"
 
-    override fun back(): State = MenuState()
+    override val back = MenuState()
 
-    override fun forward(option: Int): State {
+    override fun forward(option: Int): TeaTemperatureState {
         val teaColor = when (option) {
-            1 -> {
-                Black
-            }
-            2 -> {
-                Green
-            }
-            else -> {
-                throw NoSuchMenuItemException(option)
-            }
+            1 -> Black
+            2 -> Green
+            else -> throw NoSuchMenuItemException(option)
         }
-
         return TeaTemperatureState(teaColor)
     }
 }
 
-class TeaTemperatureState(private val teaColor: TeaColor): State() {
-    override fun optionsNames(): List<String> = listOf("Горячий", "Холодный")
+class TeaTemperatureState(private val teaColor: TeaColor) : State() {
+    override val optionsNames = listOf("Горячий", "Холодный")
 
-    override fun name(): String = "Температура чая"
+    override val name = "Температура чая"
 
-    override fun back(): State = TeaState()
+    override val back = TeaState
 
-    override fun forward(option: Int): State {
+    override fun forward(option: Int): TeaSizeState {
         val teaTemperature = when (option) {
-            1 -> {
-                Hot
-            }
-            2 -> {
-                Cold
-            }
-            else -> {
-                throw NoSuchMenuItemException(option)
-            }
+            1 -> Hot
+            2 -> Cold
+            else -> throw NoSuchMenuItemException(option)
         }
 
         return TeaSizeState(teaColor, teaTemperature)
@@ -55,26 +42,20 @@ class TeaTemperatureState(private val teaColor: TeaColor): State() {
 }
 
 class TeaSizeState(private val teaColor: TeaColor, private val teaTemperature: TeaTemperature) : State() {
-    override fun optionsNames(): List<String> = listOf("Маленький", "Средний")
+    override val optionsNames = listOf("Маленький", "Средний")
 
-    override fun name(): String = "Размер чая"
+    override val name = "Размер чая"
 
-    override fun back(): State = TeaTemperatureState(teaColor)
+    override val back = TeaTemperatureState(teaColor)
 
-    override fun forward(option: Int): State {
+    override fun forward(option: Int): TeaState {
         val teaSize = when (option) {
-            1 -> {
-                TeaSmall
-            }
-            2 -> {
-                TeaMedium
-            }
-            else -> {
-                throw NoSuchMenuItemException(option)
-            }
+            1 -> TeaSmall
+            2 -> TeaMedium
+            else -> throw NoSuchMenuItemException(option)
         }
 
         CafeManager.products.add(Tea(teaColor, teaTemperature, teaSize))
-        return TeaState()
+        return TeaState
     }
 }
