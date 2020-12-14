@@ -1,7 +1,6 @@
-package ru.itmo.cafe.model.product
+package ru.itmo.cafe.model.item
 
 import org.junit.Test
-import ru.itmo.cafe.model.item.Product
 import ru.itmo.cafe.model.item.drinks.*
 import ru.itmo.cafe.model.item.food.CheeseBurger
 import ru.itmo.cafe.model.item.food.HamBurger
@@ -15,7 +14,7 @@ class ProductTest {
         val hamburger: Product = HamBurger
         val cheeseBurger: Product = CheeseBurger
         val tea: Product = Tea(Black, Cold, TeaMedium)
-        val coffee: Coffee = Coffee(Espresso, CoffeeMedium)
+        val coffee: Product = Coffee(Espresso, CoffeeMedium)
 
         assertEquals((hamburger.price - hamburger.price * hamburger.discount).toInt(), hamburger.priceWithDiscount)
         assertEquals(

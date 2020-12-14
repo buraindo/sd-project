@@ -12,6 +12,14 @@ import kotlin.test.assertEquals
 
 class ReceiptTest {
     @Test
+    fun testSimpleReceipt() {
+        val order = Order.Builder().build()
+        val receipt = Receipt(order)
+        assertEquals(order.id, receipt.orderId)
+        assertEquals(order.products, receipt.products)
+    }
+
+    @Test
     fun testPrice() {
         val order = Order.Builder().withProducts(
             listOf(

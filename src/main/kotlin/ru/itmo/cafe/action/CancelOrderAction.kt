@@ -1,6 +1,6 @@
 package ru.itmo.cafe.action
 
-import ru.itmo.cafe.exceptions.OrderNotFoundException
+import ru.itmo.cafe.exceptions.*
 import ru.itmo.cafe.model.order.Status
 
 class CancelOrderAction(private val orderId: Int) : Action() {
@@ -8,13 +8,16 @@ class CancelOrderAction(private val orderId: Int) : Action() {
         val action = Processor.findAction(orderId)
         if (action !is CreateOrderAction) throw OrderNotFoundException(orderId)
 
-        if (action.order.status == Status.CANCELLED) {
-            println("Заказ уже отменен")
-            return
+        val order = action.order
+        when (order.status) {
+            Status.CREATED -> {
+                action.cancel()
+                order.status = Status.CANCELLED
+                println("Заказ $orderId отменен")
+            }
+            Status.PICKED -> throw OrderAlreadyPickedException()
+            Status.CANCELLED -> throw OrderAlreadyCancelledException()
+            Status.READY -> throw OrderAlreadyReadyException()
         }
-
-        action.cancel()
-        action.order.status = Status.CANCELLED
-        println("Заказ $orderId отменен")
     }
 }

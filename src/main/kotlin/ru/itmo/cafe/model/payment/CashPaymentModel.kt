@@ -1,5 +1,5 @@
 package ru.itmo.cafe.model.payment
 
-class CashPaymentModel : PaymentModel {
+object CashPaymentModel : PaymentModel {
     override val prompt = "Оплата наличными..."
 }

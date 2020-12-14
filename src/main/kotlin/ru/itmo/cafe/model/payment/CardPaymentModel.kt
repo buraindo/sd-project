@@ -1,5 +1,5 @@
 package ru.itmo.cafe.model.payment
 
-class CardPaymentModel : PaymentModel {
+object CardPaymentModel : PaymentModel {
     override val prompt = "Прикладывайте карту"
 }

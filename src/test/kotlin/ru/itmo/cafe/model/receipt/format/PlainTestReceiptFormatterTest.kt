@@ -27,6 +27,6 @@ class PlainTestReceiptFormatterTest {
                 "Гамбургер: ${HamBurger.priceWithDiscount}\n" +
                 "Чай черный, холодный, 0.2л: ${Tea(Black, Cold, TeaSmall).priceWithDiscount}\n" +
                 "Итого: ${order.products.sumBy { it.priceWithDiscount }} (с учетом скидки и НДС)"
-        assertEquals(text, PlainTextReceiptFormatter().format(receipt))
+        assertEquals(text, PlainTextReceiptFormatter.format(receipt))
     }
 }

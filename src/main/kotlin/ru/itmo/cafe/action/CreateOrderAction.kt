@@ -12,6 +12,9 @@ class CreateOrderAction(val order: Order) : CancellableAction() {
 
     override fun cancel() = job.cancel()
 
+    override val isActive
+        get() = job.isActive
+
     override fun execute() {
         job = OrderManager.processOrder(order)
         println("Спасибо за заказ! Номер заказа: $id")

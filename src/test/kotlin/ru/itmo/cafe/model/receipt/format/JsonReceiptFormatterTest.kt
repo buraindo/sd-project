@@ -23,6 +23,6 @@ class JsonReceiptFormatterTest {
             )
         ).build()
         val receipt = Receipt(order)
-        assertEquals(JsonReceiptFormatter().format(receipt), ObjectMapper().writeValueAsString(receipt))
+        assertEquals(JsonReceiptFormatter.format(receipt), ObjectMapper().writeValueAsString(receipt))
     }
 }
