@@ -18,13 +18,17 @@ object HomeState : State() {
 
     override fun forward(option: Int) = when (option) {
         1 -> MenuState()
-        2 -> PaymentState.also {
-            val products = CafeManager.products
-            if (products.isEmpty()) {
-                println("Корзина пуста")
+        2 -> {
+            CafeManager.products.also { products ->
+                if (products.isEmpty()) {
+                    println("Корзина пуста")
+                    return this
+                }
+
+                products.forEach { it.print() }
             }
 
-            products.forEach { it.print() }
+            PaymentState
         }
         3 -> OrderStatusState
         else -> throw NoSuchMenuItemException(option)

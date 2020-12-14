@@ -11,6 +11,7 @@ import ru.itmo.cafe.cli.state.State
 import ru.itmo.cafe.model.order.Order
 import ru.itmo.cafe.model.payment.CardPaymentModel
 import ru.itmo.cafe.model.payment.CashPaymentModel
+import ru.itmo.cafe.model.receipt.format.JsonReceiptFormatter
 import ru.itmo.cafe.model.receipt.format.PlainTextReceiptFormatter
 
 object PaymentState : State() {
@@ -21,7 +22,7 @@ object PaymentState : State() {
 
     override val back = HomeState
 
-    override fun forward(option: Int): HomeState {
+    override fun forward(option: Int): State {
         val paymentModel = when (option) {
             1 -> CashPaymentModel()
             2 -> CardPaymentModel()
@@ -33,12 +34,54 @@ object PaymentState : State() {
             Order.Builder().withProducts(CafeManager.products).withToGo(CafeManager.toGo).withPaymentModel(paymentModel)
                 .build()
         // TODO (damtev) спросить нужен ли чек, и в каком формате печатать
-        val receiptAction = PrintReceiptAction(order, PlainTextReceiptFormatter())
-        Processor.schedule(receiptAction)
         CafeManager.clear()
 
         Processor.schedule(PaymentAction(paymentModel))
         Processor.schedule(CreateOrderAction(order))
+
+        return ReceiptState(order)
+    }
+}
+
+class ReceiptState(val order: Order): State() {
+    override val optionsNames: List<String> = listOf("Распечатать чек")
+
+    override val back: State = HomeState
+
+    override val name: String = "Чек"
+
+    override fun forward(option: Int): State = when (option) {
+        1 -> {
+            ChooseReceiptTypeState(order)
+        }
+        else -> {
+            throw NoSuchMenuItemException(option)
+        }
+    }
+}
+
+class ChooseReceiptTypeState(val order: Order): State() {
+    override val optionsNames: List<String> = listOf("Текст", "JSON")
+
+    override val back: State = HomeState
+
+    override val name: String = "Вид чека"
+
+    override fun forward(option: Int): State {
+        val receiptFormatter = when (option) {
+            1 -> {
+                PlainTextReceiptFormatter()
+            }
+            2 -> {
+                JsonReceiptFormatter()
+            }
+            else -> {
+                throw NoSuchMenuItemException(option)
+            }
+        }
+
+        val receiptAction = PrintReceiptAction(order, receiptFormatter)
+        Processor.schedule(receiptAction)
 
         return HomeState
     }
