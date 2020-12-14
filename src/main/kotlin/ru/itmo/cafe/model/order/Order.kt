@@ -4,9 +4,8 @@ import ru.itmo.cafe.context.GlobalContext
 import ru.itmo.cafe.model.item.Product
 import ru.itmo.cafe.model.payment.PaymentModel
 
-class Order(val id: Int) {
+class Order private constructor(val id: Int) {
     private var toGo: Boolean = false
-    private var receipt: Boolean = false
 
     internal var products: List<Product> = mutableListOf()
         private set
@@ -24,11 +23,6 @@ class Order(val id: Int) {
 
         fun withPaymentModel(paymentModel: PaymentModel): Builder {
             order.paymentModel = paymentModel
-            return this
-        }
-
-        fun withReceipt(): Builder {
-            order.receipt = true
             return this
         }
 

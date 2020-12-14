@@ -24,8 +24,8 @@ object PaymentState : State() {
 
     override fun forward(option: Int): State {
         val paymentModel = when (option) {
-            1 -> CashPaymentModel()
-            2 -> CardPaymentModel()
+            1 -> CashPaymentModel
+            2 -> CardPaymentModel
             else -> throw NoSuchMenuItemException(option)
         }
 
@@ -34,8 +34,8 @@ object PaymentState : State() {
                 .build()
         CafeManager.clear()
 
-        Processor.schedule(PaymentAction(paymentModel))
-        Processor.schedule(CreateOrderAction(order))
+        Processor.safeSchedule(PaymentAction(paymentModel))
+        Processor.safeSchedule(CreateOrderAction(order))
 
         return ReceiptState(order)
     }
@@ -63,13 +63,13 @@ class ChooseReceiptTypeState(val order: Order) : State() {
 
     override fun forward(option: Int): State {
         val receiptFormatter = when (option) {
-            1 -> PlainTextReceiptFormatter()
-            2 -> JsonReceiptFormatter()
+            1 -> PlainTextReceiptFormatter
+            2 -> JsonReceiptFormatter
             else -> throw NoSuchMenuItemException(option)
         }
 
         PrintReceiptAction(order, receiptFormatter).also {
-            Processor.schedule(it)
+            Processor.safeSchedule(it)
         }
 
         return HomeState

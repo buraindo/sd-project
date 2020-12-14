@@ -24,7 +24,7 @@ object OrderStatusState : State() {
             OrderManager.findOrder(option)
         }.onFailure { failed = true }
 
-        Processor.schedule(ViewOrderAction(option))
+        Processor.safeSchedule(ViewOrderAction(option))
 
         return if (failed) this else OrderOptionState(option)
     }
@@ -45,7 +45,7 @@ class OrderOptionState(private val orderId: Int) : State() {
             else -> throw NoSuchMenuItemException(option)
         }
 
-        Processor.schedule(action)
+        Processor.safeSchedule(action)
 
         return HomeState
     }
