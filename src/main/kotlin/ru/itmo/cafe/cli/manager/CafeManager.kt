@@ -17,7 +17,7 @@ class CafeManager : Runnable {
             }
         }.onFailure {
             ApplicationContextProvider.context.getBean(Profiler::class.java).writeSessionResult()
-            println("Something went wrong...")
+            println("Что-то пошло не так...")
         }
     }
 
