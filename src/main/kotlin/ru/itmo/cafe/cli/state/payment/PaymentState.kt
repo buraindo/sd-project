@@ -22,19 +22,23 @@ object PaymentState : State() {
     override val back = HomeState
 
     override fun forward(option: Int): HomeState {
-        val curOrder = Order.Builder().withItems(CafeManager.products).withToGo(CafeManager.toGo).build()
-        val receiptAction = PrintReceiptAction(curOrder, PlainTextReceiptFormatter())
-        Processor.schedule(receiptAction)
-        CafeManager.clear()
-
         val paymentModel = when (option) {
             1 -> CashPaymentModel()
             2 -> CardPaymentModel()
             else -> throw NoSuchMenuItemException(option)
         }
 
+        // TODO (damtev), если чек нужен, вызвать withReceipt от нужного формата
+        val order =
+            Order.Builder().withProducts(CafeManager.products).withToGo(CafeManager.toGo).withPaymentModel(paymentModel)
+                .build()
+        // TODO (damtev) спросить нужен ли чек, и в каком формате печатать
+        val receiptAction = PrintReceiptAction(order, PlainTextReceiptFormatter())
+        Processor.schedule(receiptAction)
+        CafeManager.clear()
+
         Processor.schedule(PaymentAction(paymentModel))
-        Processor.schedule(CreateOrderAction(curOrder))
+        Processor.schedule(CreateOrderAction(order))
 
         return HomeState
     }
