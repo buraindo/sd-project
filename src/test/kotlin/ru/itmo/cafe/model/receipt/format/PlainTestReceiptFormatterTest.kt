@@ -14,7 +14,7 @@ import kotlin.test.assertEquals
 class PlainTestReceiptFormatterTest {
     @Test
     fun format() {
-        val order = Order.Builder().withItems(
+        val order = Order.Builder().withProducts(
             listOf(
                 CheeseBurger,
                 HamBurger,

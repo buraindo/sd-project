@@ -17,8 +17,8 @@ class Order(val id: Int) {
     class Builder {
         private val order = Order(GlobalContext.nextId())
 
-        fun withItems(products: List<Product>): Builder {
-            order.products = products
+        fun withProducts(products: List<Product>): Builder {
+            order.products = ArrayList(products)
             return this
         }
 

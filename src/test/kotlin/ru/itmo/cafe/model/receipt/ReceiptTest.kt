@@ -13,7 +13,7 @@ import kotlin.test.assertEquals
 class ReceiptTest {
     @Test
     fun testPrice() {
-        val order = Order.Builder().withItems(
+        val order = Order.Builder().withProducts(
             listOf(
                 CheeseBurger,
                 HamBurger,
