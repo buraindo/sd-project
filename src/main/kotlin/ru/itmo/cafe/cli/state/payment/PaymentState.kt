@@ -29,11 +29,9 @@ object PaymentState : State() {
             else -> throw NoSuchMenuItemException(option)
         }
 
-        // TODO (damtev), если чек нужен, вызвать withReceipt от нужного формата
         val order =
             Order.Builder().withProducts(CafeManager.products).withToGo(CafeManager.toGo).withPaymentModel(paymentModel)
                 .build()
-        // TODO (damtev) спросить нужен ли чек, и в каком формате печатать
         CafeManager.clear()
 
         Processor.schedule(PaymentAction(paymentModel))
@@ -43,25 +41,21 @@ object PaymentState : State() {
     }
 }
 
-class ReceiptState(val order: Order): State() {
-    override val optionsNames: List<String> = listOf("Распечатать чек")
+class ReceiptState(val order: Order) : State() {
+    override val optionsNames = listOf("Распечатать чек")
 
     override val back: State = HomeState
 
     override val name: String = "Чек"
 
     override fun forward(option: Int): State = when (option) {
-        1 -> {
-            ChooseReceiptTypeState(order)
-        }
-        else -> {
-            throw NoSuchMenuItemException(option)
-        }
+        1 -> ChooseReceiptTypeState(order)
+        else -> throw NoSuchMenuItemException(option)
     }
 }
 
-class ChooseReceiptTypeState(val order: Order): State() {
-    override val optionsNames: List<String> = listOf("Текст", "JSON")
+class ChooseReceiptTypeState(val order: Order) : State() {
+    override val optionsNames = listOf("Текст", "JSON")
 
     override val back: State = HomeState
 
@@ -69,19 +63,14 @@ class ChooseReceiptTypeState(val order: Order): State() {
 
     override fun forward(option: Int): State {
         val receiptFormatter = when (option) {
-            1 -> {
-                PlainTextReceiptFormatter()
-            }
-            2 -> {
-                JsonReceiptFormatter()
-            }
-            else -> {
-                throw NoSuchMenuItemException(option)
-            }
+            1 -> PlainTextReceiptFormatter()
+            2 -> JsonReceiptFormatter()
+            else -> throw NoSuchMenuItemException(option)
         }
 
-        val receiptAction = PrintReceiptAction(order, receiptFormatter)
-        Processor.schedule(receiptAction)
+        PrintReceiptAction(order, receiptFormatter).also {
+            Processor.schedule(it)
+        }
 
         return HomeState
     }
