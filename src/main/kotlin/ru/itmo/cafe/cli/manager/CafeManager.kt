@@ -4,13 +4,20 @@ import ru.itmo.cafe.cli.state.HomeState
 import ru.itmo.cafe.cli.state.State
 import ru.itmo.cafe.cli.state.State.Companion.BACK
 import ru.itmo.cafe.model.item.Product
+import ru.itmo.cafe.profiler.aspect.Profiler
+import ru.itmo.cafe.profiler.configuration.ApplicationContextProvider
 
 class CafeManager : Runnable {
     private var curState: State = HomeState
 
     override fun run() {
-        while (true) {
-            process()
+        runCatching {
+            while (true) {
+                process()
+            }
+        }.onFailure {
+            ApplicationContextProvider.context.getBean(Profiler::class.java).writeSessionResult()
+            println("Something went wrong...")
         }
     }
 
