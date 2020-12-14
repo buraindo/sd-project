@@ -14,7 +14,7 @@ import ru.itmo.cafe.model.payment.CashPaymentModel
 import ru.itmo.cafe.model.receipt.format.JsonReceiptFormatter
 import ru.itmo.cafe.model.receipt.format.PlainTextReceiptFormatter
 
-object PaymentState : State() {
+open class PaymentState : State() {
 
     override val optionsNames = listOf("Наличные", "Карта")
 
