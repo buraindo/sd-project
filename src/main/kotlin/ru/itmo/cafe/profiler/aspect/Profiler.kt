@@ -43,8 +43,8 @@ object Profiler {
 
     private val theMostPopularProduct: Product?
         get() = products
-            .groupBy { it }
-            .mapValues { it.value.size }
+            .groupBy { it.name }
+            .map { it.value.first() to it.value.size }
             .toList()
             .maxByOrNull { it.second }?.first
 
